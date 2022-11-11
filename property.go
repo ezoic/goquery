@@ -60,6 +60,12 @@ func (s *Selection) SetAttr(attrName, val string) *Selection {
 // Text gets the combined text contents of each element in the set of matched
 // elements, including their descendants.
 func (s *Selection) Text() string {
+	return s.TextGlued(" ")
+}
+
+// Text gets the combined text contents of each element in the set of matched
+// elements, including their descendants.
+func (s *Selection) TextGlued(glue string) string {
 	var buf bytes.Buffer
 
 	// Slightly optimized vs calling Each: no single selection object created
@@ -68,6 +74,7 @@ func (s *Selection) Text() string {
 		if n.Type == html.TextNode {
 			// Keep newlines and spaces, like jQuery
 			buf.WriteString(n.Data)
+			buf.WriteString(glue)
 		}
 		if n.FirstChild != nil {
 			for c := n.FirstChild; c != nil; c = c.NextSibling {
